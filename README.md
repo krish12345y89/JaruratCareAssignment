@@ -12,4 +12,4 @@ touch ./.env
 # run the application
 npm run dev
 # test the application
-npm run
+npm run test
