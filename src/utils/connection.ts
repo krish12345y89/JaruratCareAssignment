@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { ErrorSend } from "./errorHandle.js";
 import { config } from "dotenv";
 config({});
-const URI = process.env.MONGO_URI ;
+const URI = process.env.MONGO_URI ||  "mongodb://localhost:27017/";
 
 export const connectDB = async() => {
     await mongoose.connect(URI as string)

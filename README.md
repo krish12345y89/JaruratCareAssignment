@@ -1,7 +1,7 @@
-# JaruratCareAssignment
+# chainTechAssignment
 # node.js and git must be installed on your system if yes then ,
 # clone the project
-git clone https://github.com/krish12345y89/JaruratCareAssignment.git
+git clone https://github.com/krish12345y89/chainTechAssignment.git
 # install the dependencies
 npm install
 # build the typescript code

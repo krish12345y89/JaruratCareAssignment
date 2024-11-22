@@ -1,71 +1,59 @@
 import supertest from 'supertest';
 import express from 'express';
-import ServiceRoutes from '../routes/routes.js'; 
+import TaskRoutes from '../routes/routes.js'; 
 import { connectDB } from '../utils/connection.js'; 
 import mongoose from 'mongoose';
 
 const app = express();
 app.use(express.json());
-app.use('/api', ServiceRoutes);
+app.use('/api', TaskRoutes);
 
-const request = supertest(app); // Create a request object bound to the app
+const request = supertest(app); 
 
 beforeAll(async () => {
-    await connectDB(); // Ensure this is awaited
+    await connectDB(); 
 });
 
 afterAll(async () => {
     await mongoose.connection.close();
 });
 
-describe('Service Routes', () => {
-    let serviceId:string;
+describe('Tasks Routes', () => {
+    let taskId: string;
 
-    it('should create a new service', async () => {
+    it('should create a new task', async () => {
         const response = await request
-            .post('/api/service')
+            .post('/api/task')
             .send({
-                serviceName: 'Test Service',
-                price: 100,
-                description: 'This is a test service.',
+                taskName: 'Test Task', 
+                title: 'Test Title',
+                description: 'This is a test task.',
             });
 
         expect(response.status).toBe(201);
-        expect(response.body).toHaveProperty('_id'); // Correct property for ID
-        expect(response.body.serviceName).toBe('Test Service');
+        expect(response.body).toHaveProperty('_id');
+        expect(response.body.taskName).toBe('Test Task');
 
-        serviceId = response.body._id; // Store the ID for later tests
+        taskId = response.body._id; 
     });
 
-    it('should return all services', async () => {
-        const response = await request.get('/api/services');
+    it('should return all tasks', async () => {
+        const response = await request.get('/api/tasks');
 
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
     });
 
-    it('should return a single service', async () => {
-        const response = await request.get(`/api/service/${serviceId}`);
+    it('should return a single task', async () => {
+        const response = await request.get(`/api/task/${taskId}`);
 
         expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('_id', serviceId); // Use _id for comparison
+        expect(response.body).toHaveProperty('_id', taskId); 
     });
 
-    it('should update a service', async () => {
-        const response = await request
-            .put(`/api/service/${serviceId}`)
-            .send({
-                serviceName: 'Updated Service',
-                price: 150,
-                description: 'This is an updated test service.',
-            });
 
-        expect(response.status).toBe(200);
-        expect(response.body.serviceName).toBe('Updated Service');
-    });
-
-    it('should delete a service', async () => {
-        const response = await request.delete(`/api/service/${serviceId}`);
+    it('should delete a task', async () => {
+        const response = await request.delete(`/api/task/${taskId}`);
 
         expect(response.status).toBe(204);
     });
